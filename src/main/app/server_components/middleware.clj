@@ -72,12 +72,14 @@
   (fn [{:keys [uri anti-forgery-token] :as req}]
     (cond
       (#{"/" "/index.html"} uri)
-      (-> (resp/response (index anti-forgery-token))
+      (->
+        (resp/response (index anti-forgery-token))
         (resp/content-type "text/html"))
 
       ;; See note above on the `wslive` function.
       (#{"/wslive.html"} uri)
-      (-> (resp/response (wslive anti-forgery-token))
+      (->
+        (resp/response (wslive anti-forgery-token))
         (resp/content-type "text/html"))
 
       :else
@@ -87,7 +89,8 @@
   :start
   (let [defaults-config (:ring.middleware/defaults-config config)
         legal-origins   (get config :legal-origins #{"localhost"})]
-    (-> not-found-handler
+    (->
+      not-found-handler
       (wrap-api "/api")
       wrap-transit-params
       wrap-transit-response
